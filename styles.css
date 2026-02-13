@@ -68,12 +68,3 @@ h1 {
 button:active {
     background: #00aaff;
 }
-.rotate-on {
-  background-color: #2ecc71;
-  color: white;
-}
-
-.rotate-off {
-  background-color: #444;
-  color: white;
-}

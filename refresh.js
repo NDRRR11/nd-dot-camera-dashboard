@@ -1,4 +1,4 @@
-const refreshInterval = 3600000; // 1 hour
+const refreshInterval = 15000; // refresh every 15 seconds
 
 setInterval(() => {
   document.querySelectorAll(".refreshable").forEach(img => {

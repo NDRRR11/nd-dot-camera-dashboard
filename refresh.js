@@ -52,3 +52,16 @@ function startRotation() {
         showRegion(regions[currentRegionIndex]);
     }, 15000); // rotate every 15 seconds
 }
+function showRegion(region) {
+    const cards = document.querySelectorAll(".camera-card");
+
+    cards.forEach(card => {
+        if (region === "all" || card.dataset.region === region) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+}
+if (rotationOn) toggleRotation();
+}, 30000); // 30 seconds

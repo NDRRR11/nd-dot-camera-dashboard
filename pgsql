@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ND DOT Camera Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h1>ND DOT Camera Dashboard</h1>
+
+<div class="grid">
+
+  <div class="camera-card">
+    <div class="label">Beach — West</div>
+    <div class="image-wrapper">
+      <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBWest.jpg" class="refreshable">
+    </div>
+  </div>
+
+  <div class="camera-card">
+    <div class="label">Beach — East</div>
+    <div class="image-wrapper">
+      <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBEast.jpg" class="refreshable">
+    </div>
+  </div>
+
+</div>
+
+<script src="refresh.js"></script>
+</body>
+</html>

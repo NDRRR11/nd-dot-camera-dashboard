@@ -78,3 +78,6 @@ function toggleRotation() {
         clearInterval(rotationInterval);
     }
 }
+document.addEventListener("DOMContentLoaded", () => {
+  function toggleRotation() {}
+});

@@ -46,3 +46,22 @@ h1 {
   height: 100%;
   object-fit: contain;   /* 👈 keeps full image without cropping */
 }
+.filters {
+  text-align: center;
+  padding: 10px;
+}
+
+.filters button {
+  margin: 5px;
+  padding: 8px 14px;
+  border: none;
+  background: #007acc;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.filters button:hover {
+  background: #005f99;
+}

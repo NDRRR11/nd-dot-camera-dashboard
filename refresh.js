@@ -30,51 +30,48 @@ const regions = ["nw", "nwc", "minot", "nec", "ne", "grand-forks", "fargo", "se"
 let rotationInterval = null;
 let currentRegionIndex = 0;
 let rotationOn = false;
+let rotationInterval;
 
-function toggleRotation() {
+const rotateBtn = document.getElementById("rotateBtn");
+const refreshBtn = document.getElementById("refreshBtn");
+const rotateStatus = document.getElementById("rotateStatus");
+
+// 🔄 Toggle Rotation
+rotateBtn.addEventListener("click", () => {
     rotationOn = !rotationOn;
-    const btn = document.getElementById("rotateBtn");
 
     if (rotationOn) {
-        btn.textContent = "Stop Rotation";
+        rotateBtn.textContent = "Auto Rotate: ON";
+        rotateBtn.className = "rotate-on";
+        rotateStatus.textContent = "Rotation ON";
+        rotateStatus.className = "status-on";
         startRotation();
     } else {
-        btn.textContent = "Auto Rotate";
+        rotateBtn.textContent = "Auto Rotate: OFF";
+        rotateBtn.className = "rotate-off";
+        rotateStatus.textContent = "Rotation OFF";
+        rotateStatus.className = "status-off";
         clearInterval(rotationInterval);
     }
-}
+});
 
+// ▶ Start Rotation
 function startRotation() {
-    showRegion(regions[currentRegionIndex]);
-
     rotationInterval = setInterval(() => {
-        currentRegionIndex = (currentRegionIndex + 1) % regions.length;
-        showRegion(regions[currentRegionIndex]);
-    }, 15000); // rotate every 15 seconds
+        rotateRegions(); // your existing function
+    }, 15000);
 }
-function showRegion(region) {
-    const cards = document.querySelectorAll(".camera-card");
 
-    cards.forEach(card => {
-        if (region === "all" || card.dataset.region === region) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
+// 🔁 Refresh All Cameras
+refreshBtn.addEventListener("click", refreshAll);
+
+function refreshAll() {
+    const images = document.querySelectorAll(".camera-card img");
+    const timestamp = new Date().getTime();
+
+    images.forEach(img => {
+        const baseUrl = img.src.split("?")[0];
+        img.src = baseUrl + "?t=" + timestamp;
     });
-function toggleRotation() {
-    rotationOn = !rotationOn;
-    const btn = document.getElementById("rotateBtn");
-
-    if (rotationOn) {
-        btn.textContent = "Auto Rotate: ON";
-        btn.classList.remove("rotate-off");
-        btn.classList.add("rotate-on");
-        startRotation();
-    } else {
-        btn.textContent = "Auto Rotate: OFF";
-        btn.classList.remove("rotate-on");
-        btn.classList.add("rotate-off");
-        clearInterval(rotationInterval);
-    }
 }
+

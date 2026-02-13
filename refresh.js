@@ -18,3 +18,11 @@ function filterRegion(region) {
     }
   });
 }
+function refreshAll() {
+    const images = document.querySelectorAll("#cameraGrid img");
+
+    images.forEach(img => {
+        const baseUrl = img.src.split("?")[0]; // remove old timestamp
+        img.src = baseUrl + "?t=" + new Date().getTime(); // force reload
+    });
+}

@@ -26,3 +26,29 @@ function refreshAll() {
         img.src = baseUrl + "?t=" + new Date().getTime(); // force reload
     });
 }
+const regions = ["nw", "nwc", "minot", "nec", "ne", "grand-forks", "fargo", "se", "sec', "sc", "bisman", "swc", "sw", "mt-dickinson"]; // customize
+let rotationInterval = null;
+let currentRegionIndex = 0;
+let rotationOn = false;
+
+function toggleRotation() {
+    rotationOn = !rotationOn;
+    const btn = document.getElementById("rotateBtn");
+
+    if (rotationOn) {
+        btn.textContent = "Stop Rotation";
+        startRotation();
+    } else {
+        btn.textContent = "Auto Rotate";
+        clearInterval(rotationInterval);
+    }
+}
+
+function startRotation() {
+    showRegion(regions[currentRegionIndex]);
+
+    rotationInterval = setInterval(() => {
+        currentRegionIndex = (currentRegionIndex + 1) % regions.length;
+        showRegion(regions[currentRegionIndex]);
+    }, 15000); // rotate every 15 seconds
+}

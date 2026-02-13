@@ -62,3 +62,19 @@ function showRegion(region) {
             card.style.display = "none";
         }
     });
+function toggleRotation() {
+    rotationOn = !rotationOn;
+    const btn = document.getElementById("rotateBtn");
+
+    if (rotationOn) {
+        btn.textContent = "Auto Rotate: ON";
+        btn.classList.remove("rotate-off");
+        btn.classList.add("rotate-on");
+        startRotation();
+    } else {
+        btn.textContent = "Auto Rotate: OFF";
+        btn.classList.remove("rotate-on");
+        btn.classList.add("rotate-off");
+        clearInterval(rotationInterval);
+    }
+}

@@ -1,31 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>ND DOT Camera Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: white;
+}
 
-<h1>ND DOT Camera Dashboard</h1>
+h1 {
+  text-align: center;
+  padding: 15px;
+}
 
-<div class="grid">
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 12px;
+}
 
-  <div class="camera-card">
-    <div class="label">Beach — West</div>
-    <div class="image-wrapper">
-      <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBWest.jpg" class="refreshable">
-    </div>
-  </div>
+.camera-card {
+  background: #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+}
 
-  <div class="camera-card">
-    <div class="label">Beach — East</div>
-    <div class="image-wrapper">
-      <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBEast.jpg" class="refreshable">
-    </div>
-  </div>
+.label {
+  background: #007acc;
+  padding: 6px;
+  text-align: center;
+  font-weight: bold;
+}
 
-</div>
+/* THIS SOLVES YOUR IMAGE SCALING ISSUE */
+.image-wrapper {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-<script src="refresh.js"></script>
-</body>
-</html>
+.image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;   /* 👈 keeps full image without cropping */
+}

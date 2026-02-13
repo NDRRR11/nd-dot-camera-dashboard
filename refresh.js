@@ -62,6 +62,3 @@ function showRegion(region) {
             card.style.display = "none";
         }
     });
-}
-if (rotationOn) toggleRotation();
-}, 30000); // 30 seconds

@@ -29,3 +29,23 @@ function refreshAll() {
 const regions = ["nw", "nwc", "minot", "nec", "ne", "grand-forks", "fargo", "se", "sec', "sc", "bisman", "swc", "sw", "mt-dickinson"]; // customize
 let rotationInterval = null;
 let currentRegionIndex = 0;
+function openModal(img) {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImg");
+    const caption = document.getElementById("modalCaption");
+
+    modal.style.display = "block";
+    modalImg.src = img.src;
+    caption.textContent = img.alt;
+}
+
+function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+}
+
+// Close with ESC key
+document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+        closeModal();
+    }
+});

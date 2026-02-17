@@ -29,3 +29,14 @@ function refreshAll() {
 const regions = ["nw", "nwc", "minot", "nec", "ne", "grand-forks", "fargo", "se", "sec', "sc", "bisman", "swc", "sw", "mt-dickinson"]; // customize
 let rotationInterval = null;
 let currentRegionIndex = 0;
+// 🔁 Refresh All Cameras
+refreshBtn.addEventListener("click", refreshAll);
+
+function refreshAll() {
+    const images = document.querySelectorAll(".camera-card img");
+    const timestamp = new Date().getTime();
+
+    images.forEach(img => {
+        const baseUrl = img.src.split("?")[0];
+        img.src = baseUrl + "?t=" + timestamp;
+    });

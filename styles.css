@@ -68,3 +68,37 @@ h1 {
 button:active {
     background: #00aaff;
 }
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  padding-top: 40px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.9);
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  max-width: 95%;
+  max-height: 90%;
+  object-fit: contain;
+}
+
+#modalCaption {
+  text-align: center;
+  color: #ccc;
+  padding: 10px;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: white;
+  font-size: 40px;
+  cursor: pointer;
+}

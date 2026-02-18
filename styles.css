@@ -1,109 +1,92 @@
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #111;
-  color: white;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
 }
 
-h1 {
-  text-align: center;
-  padding: 15px;
-}
+h1 { text-align: center; padding: 15px; }
 
+/* FIX: STRICT 6 COLUMN GRID */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 12px;
-  padding: 12px;
-  align-items: start;
-  grid-auto-rows: max-content;
-  grid-auto-flow: dense; /* 👈 THIS is the magic */
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    padding: 10px;
 }
+
+/* RESPONSIVE FALLBACKS */
+@media (max-width: 1400px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
 
 .camera-card {
-  background: #1e1e1e;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 320px; /* 👈 force uniform card height */
+    background: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 280px;
 }
 
 .label {
-  background: #007acc;
-  padding: 6px;
-  text-align: center;
-  font-weight: bold;
+    background: #007acc;
+    padding: 6px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* THIS SOLVES YOUR IMAGE SCALING ISSUE */
 .image-wrapper {
-  flex: 1;              /* 👈 fills remaining card space */
-  width: 100%;
-  overflow: hidden;
-  background: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    flex: 1;
+    position: relative;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: zoom-in;
 }
 
 .image-wrapper img {
-  height: 100%;
-  object-fit: contain;   /* 👈 keeps full image without cropping */
-}
-.filters {
-  text-align: center;
-  padding: 10px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-.filters button {
-  margin: 5px;
-  padding: 8px 14px;
-  border: none;
-  background: #007acc;
-  color: white;
-  font-weight: bold;
-  border-radius: 6px;
-  cursor: pointer;
+/* SPINNER STYLES */
+.spinner {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 4px solid rgba(255,255,255,0.1);
+    border-left-color: #007acc;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
-.filters button:hover {
-  background: #005f99;
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* BUTTONS */
+.controls, .filters { text-align: center; padding: 10px; }
+button {
+    margin: 4px; padding: 8px 12px;
+    border: none; background: #007acc; color: white;
+    font-weight: bold; border-radius: 4px; cursor: pointer;
 }
-button:active {
-    background: #00aaff;
-}
+#autoRotateBtn[data-status="on"] { background: #28a745; }
+#autoRotateBtn[data-status="off"] { background: #dc3545; }
+
+/* MODAL / LIGHTBOX */
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  padding-top: 40px;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.9);
+    display: none; position: fixed; z-index: 999;
+    padding-top: 50px; left: 0; top: 0;
+    width: 100%; height: 100%; background: rgba(0,0,0,0.95);
 }
-
 .modal-content {
-  margin: auto;
-  display: block;
-  max-width: 95%;
-  max-height: 90%;
-  object-fit: contain;
+    margin: auto; display: block;
+    max-width: 90%; max-height: 80vh; object-fit: contain;
 }
-
-#modalCaption {
-  text-align: center;
-  color: #ccc;
-  padding: 10px;
-}
-
-.close {
-  position: absolute;
-  top: 15px;
-  right: 35px;
-  color: white;
-  font-size: 40px;
-  cursor: pointer;
-}
+.close { position: absolute; top: 15px; right: 35px; color: white; font-size: 40px; cursor: pointer; }
+#modalCaption { text-align: center; padding: 20px; font-size: 1.5rem; }

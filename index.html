@@ -3,27 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ND DOT Camera Dashboard - FULL VERSION</title>
+    <title>ND DOT Full Dashboard - 20s Countdown</title>
     <style>
-        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: #111; color: white; }
-        header { background: #1e1e1e; padding: 15px; border-bottom: 2px solid #333; position: sticky; top: 0; z-index: 100; }
-        h1 { text-align: center; margin: 0 0 15px 0; font-size: 1.5rem; color: #007acc; }
-        .controls, .filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 10px; }
-        button { padding: 8px 12px; border: none; background: #333; color: white; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+        body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: #111; color: white; overflow-x: hidden; }
+        
+        /* HEADER & TIMER */
+        header { background: #1e1e1e; border-bottom: 2px solid #333; position: sticky; top: 0; z-index: 100; }
+        #timerContainer { width: 100%; height: 5px; background: #222; display: none; }
+        #timerBar { width: 0%; height: 100%; background: #28a745; transition: width 0.1s linear; }
+        .header-content { padding: 10px 15px; }
+        h1 { text-align: center; margin: 0 0 10px 0; font-size: 1.3rem; color: #007acc; }
+
+        .controls, .filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 5px; }
+        button { padding: 6px 10px; border: none; background: #333; color: white; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 0.7rem; }
         button:hover { background: #444; }
         #refreshBtn { background: #007acc; }
         #autoRotateBtn[data-status="on"] { background: #28a745; }
         #autoRotateBtn[data-status="off"] { background: #dc3545; }
         
+        /* GRID - 6 COLUMNS */
         .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; padding: 15px; }
         @media (max-width: 1600px) { .grid { grid-template-columns: repeat(4, 1fr); } }
-        @media (max-width: 1000px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
 
-        .camera-card { background: #1e1e1e; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; height: 230px; border: 1px solid #333; }
-        .label { background: #007acc; padding: 5px; text-align: center; font-weight: bold; font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background 0.4s; }
-        .label.refreshing { background-color: #00ffcc; color: #000; }
-        .image-wrapper { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; cursor: zoom-in; overflow: hidden; }
+        .camera-card { background: #1e1e1e; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; height: 210px; border: 1px solid #333; transition: transform 0.2s; }
+        .camera-card:hover { transform: scale(1.02); z-index: 5; }
+        .label { background: #007acc; padding: 4px; text-align: center; font-weight: bold; font-size: 0.65rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background 0.3s; }
+        .label.refreshing { background-color: #00ffcc !important; color: #000; }
+        .image-wrapper { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; cursor: zoom-in; }
         .image-wrapper img { width: 100%; height: 100%; object-fit: contain; }
 
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
@@ -34,143 +42,146 @@
 <body>
 
 <header>
-    <h1>ND DOT Camera Dashboard</h1>
-    <div class="controls">
-        <button id="refreshBtn">Refresh All</button>
-        <button id="autoRotateBtn" data-status="off">Auto-Rotate: OFF</button>
-    </div>
-    <div class="filters">
-        <button onclick="filterRegion('all')">All</button>
-        <button onclick="filterRegion('nw')">NW</button>
-        <button onclick="filterRegion('nwc')">NWC</button>
-        <button onclick="filterRegion('minot')">Minot</button>
-        <button onclick="filterRegion('nec')">NEC</button>
-        <button onclick="filterRegion('ne')">NE</button>
-        <button onclick="filterRegion('grand-forks')">Grand Forks</button>
-        <button onclick="filterRegion('fargo')">Fargo</button>
-        <button onclick="filterRegion('se')">SE</button>
-        <button onclick="filterRegion('sec')">SEC</button>
-        <button onclick="filterRegion('sc')">SC</button>
-        <button onclick="filterRegion('bisman')">Bisman</button>
-        <button onclick="filterRegion('swc')">SWC</button>
-        <button onclick="filterRegion('sw')">SW</button>
-        <button onclick="filterRegion('mt-dickinson')">MT-Dickinson</button>
+    <div id="timerContainer"><div id="timerBar"></div></div>
+    <div class="header-content">
+        <h1>ND DOT Camera Dashboard</h1>
+        <div class="controls">
+            <button id="refreshBtn">Refresh All</button>
+            <button id="autoRotateBtn" data-status="off">Auto-Rotate: OFF</button>
+        </div>
+        <div class="filters">
+            <button onclick="filterRegion('all')">All</button>
+            <button onclick="filterRegion('nw')">NW</button>
+            <button onclick="filterRegion('nwc')">NWC</button>
+            <button onclick="filterRegion('minot')">Minot</button>
+            <button onclick="filterRegion('nec')">NEC</button>
+            <button onclick="filterRegion('ne')">NE</button>
+            <button onclick="filterRegion('grand-forks')">GF</button>
+            <button onclick="filterRegion('fargo')">Fargo</button>
+            <button onclick="filterRegion('se')">SE</button>
+            <button onclick="filterRegion('sec')">SEC</button>
+            <button onclick="filterRegion('sc')">SC</button>
+            <button onclick="filterRegion('bisman')">Bisman</button>
+            <button onclick="filterRegion('swc')">SWC</button>
+            <button onclick="filterRegion('sw')">SW</button>
+            <button onclick="filterRegion('mt-dickinson')">MT-Dick</button>
+        </div>
     </div>
 </header>
 
 <div class="grid" id="cameraGrid">
-    <div class="camera-card" data-region="nw"><div class="label">Williston - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP15Willistoneast.jpg" class="refreshable" alt="Williston E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nw"><div class="label">Williston - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP15Willistonwest.jpg" class="refreshable" alt="Williston W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nw"><div class="label">Ray - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP51Rayeast.jpg" class="refreshable" alt="Ray E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nw"><div class="label">Ray - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP51Raywest.jpg" class="refreshable" alt="Ray W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nw"><div class="label">Watford City - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US85RP137WatfordCityNorth.jpg" class="refreshable" alt="Watford City N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nw"><div class="label">Watford City - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US85RP137WatfordCitySouth.jpg" class="refreshable" alt="Watford City S" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nw"><div class="label">New Town - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND23RP46Newtowneast.jpg" class="refreshable" alt="New Town E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nw"><div class="label">New Town - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND23RP46Newtownwest.jpg" class="refreshable" alt="New Town W" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nw"><div class="label">Williston E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP15Willistoneast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nw"><div class="label">Williston W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP15Willistonwest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nw"><div class="label">Ray E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP51Rayeast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nw"><div class="label">Ray W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP51Raywest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nw"><div class="label">Watford City N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US85RP137WatfordCityNorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nw"><div class="label">Watford City S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US85RP137WatfordCitySouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nw"><div class="label">New Town E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND23RP46Newtowneast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nw"><div class="label">New Town W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND23RP46Newtownwest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="nwc"><div class="label">Killdeer - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/killdeerweast.jpg" class="refreshable" alt="Killdeer E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nwc"><div class="label">Killdeer - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/killdeerwwest.jpg" class="refreshable" alt="Killdeer W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nwc"><div class="label">Manning - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND22RP82Manningnorth.jpg" class="refreshable" alt="Manning N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nwc"><div class="label">Manning - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND22RP82Manningsouth.jpg" class="refreshable" alt="Manning S" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nwc"><div class="label">Golden Valley - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND200RP231GoldenValleyEast.jpg" class="refreshable" alt="Golden Valley E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nwc"><div class="label">Golden Valley - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND200RP231GoldenValleyWest.jpg" class="refreshable" alt="Golden Valley W" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nwc"><div class="label">Killdeer E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/killdeerweast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nwc"><div class="label">Killdeer W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/killdeerwwest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nwc"><div class="label">Manning N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND22RP82Manningnorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nwc"><div class="label">Manning S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND22RP82Manningsouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nwc"><div class="label">Golden Valley E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND200RP231GoldenValleyEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nwc"><div class="label">Golden Valley W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND200RP231GoldenValleyWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="minot"><div class="label">Minot US 2 - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP151MinotEast.jpg" class="refreshable" alt="Minot 2 E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="minot"><div class="label">Minot US 2 - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP151MinotWest.jpg" class="refreshable" alt="Minot 2 W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="minot"><div class="label">W Minot US 2 - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP142MinotEast.jpg" class="refreshable" alt="W Minot 2 E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="minot"><div class="label">W Minot US 2 - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP142MinotWest.jpg" class="refreshable" alt="W Minot 2 W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="minot"><div class="label">Minot US 83 - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US83RP196MinotNorth.jpg" class="refreshable" alt="Minot 83 N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="minot"><div class="label">Minot US 83 - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US83RP196MinotSouth.jpg" class="refreshable" alt="Minot 83 S" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="minot"><div class="label">Minot 2 E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP151MinotEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="minot"><div class="label">Minot 2 W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP151MinotWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="minot"><div class="label">W Minot 2 E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP142MinotEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="minot"><div class="label">W Minot 2 W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP142MinotWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="minot"><div class="label">Minot 83 N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US83RP196MinotNorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="minot"><div class="label">Minot 83 S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US83RP196MinotSouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="nec"><div class="label">Rugby - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/rugbyeast.jpg" class="refreshable" alt="Rugby E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nec"><div class="label">Rugby - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/rugbywest.jpg" class="refreshable" alt="Rugby W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nec"><div class="label">Devils Lake - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP271DevilsLakeEast.jpg" class="refreshable" alt="Devils Lake E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nec"><div class="label">Devils Lake - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP271DevilsLakeWest.jpg" class="refreshable" alt="Devils Lake W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nec"><div class="label">Fessenden - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US52RP180FessendenEast.jpg" class="refreshable" alt="Fessenden E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nec"><div class="label">Fessenden - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US52RP180FessendenWest.jpg" class="refreshable" alt="Fessenden W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nec"><div class="label">Denhoff - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/denhoffnorth.jpg" class="refreshable" alt="Denhoff N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="nec"><div class="label">Denhoff - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/denhoffsouth.jpg" class="refreshable" alt="Denhoff S" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nec"><div class="label">Rugby E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/rugbyeast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nec"><div class="label">Rugby W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/rugbywest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nec"><div class="label">Devils Lake E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP271DevilsLakeEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nec"><div class="label">Devils Lake W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP271DevilsLakeWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nec"><div class="label">Fessenden E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US52RP180FessendenEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nec"><div class="label">Fessenden W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US52RP180FessendenWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nec"><div class="label">Denhoff N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/denhoffnorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="nec"><div class="label">Denhoff S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/denhoffsouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="ne"><div class="label">Buxton - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP114BuxtonNorth.jpg" class="refreshable" alt="Buxton N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="ne"><div class="label">Buxton - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP114BuxtonSouth.jpg" class="refreshable" alt="Buxton S" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="ne"><div class="label">Pembina - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP215PembinaNorth.jpg" class="refreshable" alt="Pembina N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="ne"><div class="label">Pembina - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP215PembinaSouth.jpg" class="refreshable" alt="Pembina S" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="ne"><div class="label">Emerado - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/emeradoeast.jpg" class="refreshable" alt="Emerado E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="ne"><div class="label">Emerado - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/emeradowest.jpg" class="refreshable" alt="Emerado W" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="ne"><div class="label">Buxton N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP114BuxtonNorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="ne"><div class="label">Buxton S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP114BuxtonSouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="ne"><div class="label">Pembina N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP215PembinaNorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="ne"><div class="label">Pembina S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP215PembinaSouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="ne"><div class="label">Emerado E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/emeradoeast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="ne"><div class="label">Emerado W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/emeradowest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="grand-forks"><div class="label">GF NB - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/grandforks2sbnorth.jpg" class="refreshable" alt="GF NB N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="grand-forks"><div class="label">GF NB - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/grandforks2sbsouth.jpg" class="refreshable" alt="GF NB S" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="grand-forks"><div class="label">GF SB - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP145GrandForksNorth.jpg" class="refreshable" alt="GF SB N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="grand-forks"><div class="label">GF SB - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP145GrandForksSouth.jpg" class="refreshable" alt="GF SB S" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="grand-forks"><div class="label">GF NB N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/grandforks2sbnorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="grand-forks"><div class="label">GF NB S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/grandforks2sbsouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="grand-forks"><div class="label">GF SB N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP145GrandForksNorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="grand-forks"><div class="label">GF SB S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP145GrandForksSouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="fargo"><div class="label">West Fargo - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP343.828FargoMainAveEast.jpg" class="refreshable" alt="WFargo E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="fargo"><div class="label">West Fargo - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP343.828FargoMainAveWest.jpg" class="refreshable" alt="WFargo W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="fargo"><div class="label">Fargo Red River - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP352FargoRedRiverEast.jpg" class="refreshable" alt="Fargo RR E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="fargo"><div class="label">Fargo Red River - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP352.233FargoWRedRiverWest.jpg" class="refreshable" alt="Fargo RR W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="fargo"><div class="label">Fargo - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP68.237Fargo19th40thAveNNorth.jpg" class="refreshable" alt="Fargo N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="fargo"><div class="label">Fargo - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP61.408Fargo40thAveSouth.jpg" class="refreshable" alt="Fargo S" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="fargo"><div class="label">W Fargo E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP343.828FargoMainAveEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="fargo"><div class="label">W Fargo W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP343.828FargoMainAveWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="fargo"><div class="label">Fargo RR E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP352FargoRedRiverEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="fargo"><div class="label">Fargo RR W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP352.233FargoWRedRiverWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="fargo"><div class="label">Fargo 19th N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP68.237Fargo19th40thAveNNorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="fargo"><div class="label">Fargo 40th S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP61.408Fargo40thAveSouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="se"><div class="label">Forman - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/formannorth.jpg" class="refreshable" alt="Forman N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="se"><div class="label">Forman - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/formansouth.jpg" class="refreshable" alt="Forman S" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="se"><div class="label">Mooreton - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP23.48MooretonOHNorth.jpg" class="refreshable" alt="Mooreton N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="se"><div class="label">Mooreton - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP23.48MooretonOHSouth.jpg" class="refreshable" alt="Mooreton S" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="se"><div class="label">Forman N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/formannorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="se"><div class="label">Forman S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/formansouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="se"><div class="label">Mooreton N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP23.48MooretonOHNorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="se"><div class="label">Mooreton S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I29RP23.48MooretonOHSouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="sec"><div class="label">Medina - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP231MedinaEast.jpg" class="refreshable" alt="Medina E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sec"><div class="label">Medina - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP231MedinaWest.jpg" class="refreshable" alt="Medina W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sec"><div class="label">Jamestown - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/jamestown2ebeast.jpg" class="refreshable" alt="Jamestown E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sec"><div class="label">Jamestown - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/jamestown2ebwest.jpg" class="refreshable" alt="Jamestown W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sec"><div class="label">Valley City - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP295.7ValleyCityWBEast.jpg" class="refreshable" alt="Valley City E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sec"><div class="label">Valley City - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP295.7ValleyCityWBWest.jpg" class="refreshable" alt="Valley City W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sec"><div class="label">Casselton - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP330Casseltoneast.jpg" class="refreshable" alt="Casselton E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sec"><div class="label">Casselton - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP330Casseltonwest.jpg" class="refreshable" alt="Casselton W" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sec"><div class="label">Medina E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP231MedinaEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sec"><div class="label">Medina W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP231MedinaWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sec"><div class="label">Jamestown E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/jamestown2ebeast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sec"><div class="label">Jamestown W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/jamestown2ebwest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sec"><div class="label">Valley City E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP295.7ValleyCityWBEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sec"><div class="label">Valley City W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP295.7ValleyCityWBWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sec"><div class="label">Casselton E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP330Casseltoneast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sec"><div class="label">Casselton W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP330Casseltonwest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="sc"><div class="label">Sterling - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP184SterlingEast.jpg" class="refreshable" alt="Sterling E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sc"><div class="label">Sterling - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP184SterlingWest.jpg" class="refreshable" alt="Sterling W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sc"><div class="label">Hazelton - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US83RP47HazeltonNorth.jpg" class="refreshable" alt="Hazelton N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sc"><div class="label">Hazelton - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US83RP47HazeltonSouth.jpg" class="refreshable" alt="Hazelton S" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sc"><div class="label">Ashley - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ashleyeast.jpg" class="refreshable" alt="Ashley E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sc"><div class="label">Ashley - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ashleywest.jpg" class="refreshable" alt="Ashley W" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sc"><div class="label">Sterling E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP184SterlingEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sc"><div class="label">Sterling W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP184SterlingWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sc"><div class="label">Hazelton N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US83RP47HazeltonNorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sc"><div class="label">Hazelton S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US83RP47HazeltonSouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sc"><div class="label">Ashley E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ashleyeast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sc"><div class="label">Ashley W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ashleywest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="bisman"><div class="label">Mandan - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP151ScenicEast.jpg" class="refreshable" alt="Mandan E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="bisman"><div class="label">Mandan - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP151ScenicWest.jpg" class="refreshable" alt="Mandan W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="bisman"><div class="label">Grant Marsh - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP156GrantMarshEast.jpg" class="refreshable" alt="GrantMarsh E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="bisman"><div class="label">Grant Marsh - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP156GrantMarshWest.jpg" class="refreshable" alt="GrantMarsh W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="bisman"><div class="label">State St - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP159StateEast.jpg" class="refreshable" alt="StateSt E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="bisman"><div class="label">State St - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP159StateWest.jpg" class="refreshable" alt="StateSt W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="bisman"><div class="label">Bismarck Capital - W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/capitalnw00001.jpg" class="refreshable" alt="Capital W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="bisman"><div class="label">Bismarck US 83 - N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/bismarcksbnorth.jpg" class="refreshable" alt="Bismarck 83 N" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="bisman"><div class="label">Mandan E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP151ScenicEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="bisman"><div class="label">Mandan W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP151ScenicWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="bisman"><div class="label">Grant Marsh E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP156GrantMarshEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="bisman"><div class="label">Grant Marsh W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP156GrantMarshWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="bisman"><div class="label">State St E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP159StateEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="bisman"><div class="label">State St W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP159StateWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="bisman"><div class="label">Capital W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/capitalnw00001.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="bisman"><div class="label">Bismarck 83 N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/bismarcksbnorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="swc"><div class="label">New Salem - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP126NewSalemEast.jpg" class="refreshable" alt="New Salem E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="swc"><div class="label">New Salem - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP126NewSalemWest.jpg" class="refreshable" alt="New Salem W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="swc"><div class="label">Fort Yates - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND1806@RP22.81FortYatesNorth.jpg" class="refreshable" alt="Ft Yates N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="swc"><div class="label">Fort Yates - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND1806@RP22.81FortYatesSouth.jpg" class="refreshable" alt="Ft Yates S" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="swc"><div class="label">New Salem E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP126NewSalemEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="swc"><div class="label">New Salem W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP126NewSalemWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="swc"><div class="label">Ft Yates N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND1806@RP22.81FortYatesNorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="swc"><div class="label">Ft Yates S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/ND1806@RP22.81FortYatesSouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="sw"><div class="label">Gladstone - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/gladstoneeast.jpg" class="refreshable" alt="Gladstone E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sw"><div class="label">Gladstone - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/gladstonewest.jpg" class="refreshable" alt="Gladstone W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sw"><div class="label">New England - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/newenglandnorth.jpg" class="refreshable" alt="New England N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sw"><div class="label">New England - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/newenglandsouth.jpg" class="refreshable" alt="New England S" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sw"><div class="label">Bowman - North</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US85RP12Bowmannorth.jpg" class="refreshable" alt="Bowman N" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="sw"><div class="label">Bowman - South</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US85RP12Bowmansouth.jpg" class="refreshable" alt="Bowman S" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sw"><div class="label">Gladstone E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/gladstoneeast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sw"><div class="label">Gladstone W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/gladstonewest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sw"><div class="label">New England N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/newenglandnorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sw"><div class="label">New England S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/newenglandsouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sw"><div class="label">Bowman N</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US85RP12Bowmannorth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="sw"><div class="label">Bowman S</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US85RP12Bowmansouth.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 
-    <div class="camera-card" data-region="mt-dickinson"><div class="label">Beach - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBEast.jpg" class="refreshable" alt="Beach E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="mt-dickinson"><div class="label">Beach - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBWest.jpg" class="refreshable" alt="Beach W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="mt-dickinson"><div class="label">Painted Canyon - E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP31PaintedCanyonEast.jpg" class="refreshable" alt="PaintedCanyon E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="mt-dickinson"><div class="label">Painted Canyon - W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP31PaintedCanyonWest.jpg" class="refreshable" alt="PaintedCanyon W" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="mt-dickinson"><div class="label">Dickinson - East</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP63DickinsonEBEast.jpg" class="refreshable" alt="Dickinson E" onclick="openModal(this)"></div></div>
-    <div class="camera-card" data-region="mt-dickinson"><div class="label">Dickinson - West</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP63DickinsonEBWest.jpg" class="refreshable" alt="Dickinson W" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="mt-dickinson"><div class="label">Beach E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="mt-dickinson"><div class="label">Beach W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="mt-dickinson"><div class="label">Painted Canyon E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP31PaintedCanyonEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="mt-dickinson"><div class="label">Painted Canyon W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP31PaintedCanyonWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="mt-dickinson"><div class="label">Dickinson E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP63DickinsonEBEast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
+    <div class="camera-card" data-region="mt-dickinson"><div class="label">Dickinson W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/I94RP63DickinsonEBWest.jpg" class="refreshable" onclick="openModal(this)"></div></div>
 </div>
 
-<div id="imageModal" class="modal">
-    <span class="close" onclick="closeModal()">&times;</span>
-    <img class="modal-content" id="modalImg">
-</div>
+<div id="imageModal" class="modal"><span class="close" onclick="closeModal()">&times;</span><img class="modal-content" id="modalImg"></div>
 
 <script>
-    const refreshInterval = 30000;
-    const rotationSpeed = 6000;
+    const ROTATION_TIME = 20000; // 20 Seconds
+    const REFRESH_RATE = 30000;  // 30 Seconds
     const regions = ["nw", "nwc", "minot", "nec", "ne", "grand-forks", "fargo", "se", "sec", "sc", "bisman", "swc", "sw", "mt-dickinson"];
+    
     let rotationTimer = null;
+    let progressTimer = null;
     let currentIdx = 0;
+    let startTime = 0;
 
     document.getElementById("refreshBtn").addEventListener("click", refreshAll);
     document.getElementById("autoRotateBtn").addEventListener("click", toggleAutoRotate);
@@ -180,7 +191,7 @@
             img.src = img.src.split("?")[0] + "?t=" + new Date().getTime();
             const lbl = img.closest('.camera-card').querySelector('.label');
             lbl.classList.add('refreshing');
-            setTimeout(() => lbl.classList.remove('refreshing'), 600);
+            setTimeout(() => lbl.classList.remove('refreshing'), 800);
         });
     }
 
@@ -188,23 +199,40 @@
         document.querySelectorAll(".camera-card").forEach(card => {
             card.style.display = (region === "all" || card.dataset.region === region) ? "block" : "none";
         });
+        if(region !== 'all') refreshAll();
+    }
+
+    function updateProgressBar() {
+        const now = Date.now();
+        const elapsed = now - startTime;
+        const percent = Math.min((elapsed / ROTATION_TIME) * 100, 100);
+        document.getElementById("timerBar").style.width = percent + "%";
+        
+        if (percent >= 100) {
+            currentIdx = (currentIdx + 1) % regions.length;
+            filterRegion(regions[currentIdx]);
+            startTime = Date.now(); 
+        }
     }
 
     function toggleAutoRotate() {
         const btn = document.getElementById("autoRotateBtn");
+        const barContainer = document.getElementById("timerContainer");
         if (rotationTimer) {
-            clearInterval(rotationTimer);
+            clearInterval(progressTimer);
             rotationTimer = null;
             btn.dataset.status = "off";
             btn.innerText = "Auto-Rotate: OFF";
+            barContainer.style.display = "none";
             filterRegion("all");
         } else {
             btn.dataset.status = "on";
             btn.innerText = "Auto-Rotate: ON";
-            rotationTimer = setInterval(() => {
-                filterRegion(regions[currentIdx]);
-                currentIdx = (currentIdx + 1) % regions.length;
-            }, rotationSpeed);
+            barContainer.style.display = "block";
+            startTime = Date.now();
+            rotationTimer = true;
+            filterRegion(regions[currentIdx]);
+            progressTimer = setInterval(updateProgressBar, 100);
         }
     }
 
@@ -212,10 +240,9 @@
         document.getElementById("imageModal").style.display = "block";
         document.getElementById("modalImg").src = img.src;
     }
-
     function closeModal() { document.getElementById("imageModal").style.display = "none"; }
     window.onclick = (e) => { if (e.target.className === 'modal') closeModal(); };
-    setInterval(refreshAll, refreshInterval);
+    setInterval(refreshAll, REFRESH_RATE);
 </script>
 
 </body>

@@ -24,6 +24,9 @@ h1 {
   background: #1e1e1e;
   border-radius: 8px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 320px; /* 👈 force uniform card height */
 }
 
 .label {
@@ -35,7 +38,8 @@ h1 {
 
 /* THIS SOLVES YOUR IMAGE SCALING ISSUE */
 .image-wrapper {
-  height: 200px;
+  flex: 1;              /* 👈 fills remaining card space */
+  width: 100%;
   overflow: hidden;
   background: black;
   display: flex;

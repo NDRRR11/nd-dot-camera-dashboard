@@ -18,6 +18,19 @@ h1 {
   align-items: start; /* 👈 grid-level control */
 }
 
+.grid {
+  grid-auto-rows: max-content;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+  padding: 12px;
+  align-items: start;
+  grid-auto-rows: max-content;
+}
+
 .camera-card {
   background: #1e1e1e;
   border-radius: 8px;

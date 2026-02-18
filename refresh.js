@@ -1,33 +1,50 @@
-const refreshInterval = 30000; // 30 seconds
-const rotationSpeed = 6000;    // 6 seconds per region
+const refreshInterval = 30000; 
+const rotationSpeed = 6000;    
 const regions = ["nw", "nwc", "minot", "nec", "ne", "grand-forks", "fargo", "se", "sec", "sc", "bisman", "swc", "sw", "mt-dickinson"];
 
 let rotationTimer = null;
 let currentIdx = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
+    // 1. Hook up buttons
     document.getElementById("refreshBtn").addEventListener("click", refreshAll);
     document.getElementById("autoRotateBtn").addEventListener("click", toggleAutoRotate);
     
-    // Background refresh
+    // 2. Automatically attach Load/Error listeners to all images
+    document.querySelectorAll(".refreshable").forEach(img => {
+        img.addEventListener('load', () => hideSpinner(img));
+        img.addEventListener('error', () => {
+            console.warn("Camera failed to load:", img.src);
+            hideSpinner(img); // Hide spinner even if image fails
+        });
+    });
+
+    // Initial background refresh
     setInterval(refreshAll, refreshInterval);
 });
 
+// Helper to find the spinner in the same card
+function getSpinner(img) {
+    return img.closest('.image-wrapper').querySelector('.spinner');
+}
+
 function hideSpinner(img) {
-    const spinner = img.previousElementSibling;
-    if (spinner) spinner.style.display = 'none';
+    const spinner = getSpinner(img);
+    if (spinner) {
+        spinner.style.opacity = '0';
+        setTimeout(() => { spinner.style.display = 'none'; }, 300); // Smooth fade out
+    }
 }
 
 function showSpinner(img) {
-    const spinner = img.previousElementSibling;
-    if (spinner) spinner.style.display = 'block';
-}
-
-function filterRegion(region) {
-    const cards = document.querySelectorAll(".camera-card");
-    cards.forEach(card => {
-        card.style.display = (region === "all" || card.dataset.region === region) ? "block" : "none";
-    });
+    const spinner = getSpinner(img);
+    if (spinner) {
+        spinner.style.display = 'block';
+        spinner.style.opacity = '1';
+    }
+    
+    // SAFETY TIMEOUT: If it hasn't loaded in 5 seconds, kill the spinner
+    setTimeout(() => hideSpinner(img), 5000);
 }
 
 function refreshAll() {
@@ -36,6 +53,15 @@ function refreshAll() {
         showSpinner(img);
         const baseUrl = img.src.split("?")[0];
         img.src = `${baseUrl}?t=${new Date().getTime()}`;
+    });
+}
+
+// ... (Rest of your filterRegion, toggleAutoRotate, and Modal functions) ...
+
+function filterRegion(region) {
+    const cards = document.querySelectorAll(".camera-card");
+    cards.forEach(card => {
+        card.style.display = (region === "all" || card.dataset.region === region) ? "block" : "none";
     });
 }
 
@@ -69,6 +95,3 @@ function openModal(img) {
 function closeModal() {
     document.getElementById("imageModal").style.display = "none";
 }
-
-window.onclick = (e) => { if (e.target.className === 'modal') closeModal(); };
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });

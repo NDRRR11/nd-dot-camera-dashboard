@@ -1,5 +1,5 @@
 const refreshInterval = 30000; 
-const rotationSpeed = 6000;    
+const rotationSpeed = 20000;    
 const regions = ["nw", "nwc", "minot", "nec", "ne", "grand-forks", "fargo", "se", "sec", "sc", "bisman", "swc", "sw", "mt-dickinson"];
 
 let rotationTimer = null;

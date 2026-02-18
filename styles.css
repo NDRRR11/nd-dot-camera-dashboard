@@ -12,7 +12,7 @@ h1 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(minmax(300px, 1fr));
+  grid-template-columns: repeat(autofit, minmax(300px, 1fr));
   gap: 12px;
   padding: 12px;
 }

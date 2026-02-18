@@ -12,7 +12,7 @@ h1 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 👈 6 cameras per row */
+  grid-template-columns: repeat(4, 1fr); /* 👈 4 cameras per row */
   gap: 12px;
   padding: 12px;
   align-items: start;          /* prevents vertical stretching */

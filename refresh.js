@@ -6,57 +6,28 @@ let rotationTimer = null;
 let currentIdx = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Hook up buttons
     document.getElementById("refreshBtn").addEventListener("click", refreshAll);
     document.getElementById("autoRotateBtn").addEventListener("click", toggleAutoRotate);
     
-    // 2. Automatically attach Load/Error listeners to all images
-    document.querySelectorAll(".refreshable").forEach(img => {
-        img.addEventListener('load', () => hideSpinner(img));
-        img.addEventListener('error', () => {
-            console.warn("Camera failed to load:", img.src);
-            hideSpinner(img); // Hide spinner even if image fails
-        });
-    });
-
-    // Initial background refresh
+    // Auto-refresh timer
     setInterval(refreshAll, refreshInterval);
 });
 
-// Helper to find the spinner in the same card
-function getSpinner(img) {
-    return img.closest('.image-wrapper').querySelector('.spinner');
-}
-
-function hideSpinner(img) {
-    const spinner = getSpinner(img);
-    if (spinner) {
-        spinner.style.opacity = '0';
-        setTimeout(() => { spinner.style.display = 'none'; }, 300); // Smooth fade out
-    }
-}
-
-function showSpinner(img) {
-    const spinner = getSpinner(img);
-    if (spinner) {
-        spinner.style.display = 'block';
-        spinner.style.opacity = '1';
-    }
-    
-    // SAFETY TIMEOUT: If it hasn't loaded in 5 seconds, kill the spinner
-    setTimeout(() => hideSpinner(img), 5000);
-}
-
 function refreshAll() {
     const images = document.querySelectorAll(".refreshable");
+    
     images.forEach(img => {
-        showSpinner(img);
+        // 1. Force image reload
         const baseUrl = img.src.split("?")[0];
         img.src = `${baseUrl}?t=${new Date().getTime()}`;
+        
+        // 2. Visual feedback: flash the label blue
+        const label = img.closest('.camera-card').querySelector('.label');
+        label.classList.add('refreshing');
+        setTimeout(() => label.classList.remove('refreshing'), 500);
     });
+    console.log("All cameras updated.");
 }
-
-// ... (Rest of your filterRegion, toggleAutoRotate, and Modal functions) ...
 
 function filterRegion(region) {
     const cards = document.querySelectorAll(".camera-card");
@@ -83,6 +54,7 @@ function toggleAutoRotate() {
     }
 }
 
+// Lightbox/Modal Logic
 function openModal(img) {
     const modal = document.getElementById("imageModal");
     const modalImg = document.getElementById("modalImg");
@@ -95,3 +67,6 @@ function openModal(img) {
 function closeModal() {
     document.getElementById("imageModal").style.display = "none";
 }
+
+window.onclick = (e) => { if (e.target.id === 'imageModal') closeModal(); };
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });

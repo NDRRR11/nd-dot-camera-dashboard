@@ -21,7 +21,6 @@ h1 {
   background: #1e1e1e;
   border-radius: 8px;
   overflow: hidden;
-  align-self: start; /* 👈 prevents vertical stretching */
 }
 
 .label {

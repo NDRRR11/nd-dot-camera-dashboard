@@ -3,39 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ND DOT Full Dashboard - 20s Countdown</title>
+    <title>ND DOT Full Dashboard - Enlarged View</title>
     <style>
         body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: #111; color: white; overflow-x: hidden; }
         
         /* HEADER & TIMER */
         header { background: #1e1e1e; border-bottom: 2px solid #333; position: sticky; top: 0; z-index: 100; }
-        #timerContainer { width: 100%; height: 5px; background: #222; display: none; }
+        #timerContainer { width: 100%; height: 8px; background: #222; display: none; }
         #timerBar { width: 0%; height: 100%; background: #28a745; transition: width 0.1s linear; }
         .header-content { padding: 10px 15px; }
-        h1 { text-align: center; margin: 0 0 10px 0; font-size: 1.3rem; color: #007acc; }
+        h1 { text-align: center; margin: 0 0 10px 0; font-size: 1.5rem; color: #007acc; }
 
-        .controls, .filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-bottom: 5px; }
-        button { padding: 6px 10px; border: none; background: #333; color: white; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 0.7rem; }
+        .controls, .filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 5px; }
+        button { padding: 8px 12px; border: none; background: #333; color: white; font-weight: bold; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
         button:hover { background: #444; }
         #refreshBtn { background: #007acc; }
         #autoRotateBtn[data-status="on"] { background: #28a745; }
         #autoRotateBtn[data-status="off"] { background: #dc3545; }
         
-        /* GRID - 6 COLUMNS */
-        .grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; padding: 15px; }
-        @media (max-width: 1600px) { .grid { grid-template-columns: repeat(4, 1fr); } }
-        @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+        /* --- SIZE ADJUSTMENTS START HERE --- */
 
-        .camera-card { background: #1e1e1e; border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; height: 210px; border: 1px solid #333; transition: transform 0.2s; }
+        /* Reduced from 6 columns to 4 to make images LARGER */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 15px; 
+            padding: 20px; 
+        }
+
+        @media (max-width: 1200px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } }
+
+        .camera-card { 
+            background: #1e1e1e; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            height: 350px; /* INCREASED HEIGHT from 210px */
+            border: 1px solid #444; 
+            transition: transform 0.2s; 
+        }
+
+        .label { 
+            background: #007acc; 
+            padding: 10px; /* MORE PADDING */
+            text-align: center; 
+            font-weight: 900; /* THICKER FONT */
+            font-size: 1.1rem; /* INCREASED FONT SIZE from 0.65rem */
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            transition: background 0.3s; 
+            text-transform: uppercase; /* MAKES IT STAND OUT */
+        }
+
+        /* --- SIZE ADJUSTMENTS END HERE --- */
+
         .camera-card:hover { transform: scale(1.02); z-index: 5; }
-        .label { background: #007acc; padding: 4px; text-align: center; font-weight: bold; font-size: 0.65rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background 0.3s; }
         .label.refreshing { background-color: #00ffcc !important; color: #000; }
         .image-wrapper { flex: 1; background: #000; display: flex; align-items: center; justify-content: center; cursor: zoom-in; }
         .image-wrapper img { width: 100%; height: 100%; object-fit: contain; }
 
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .modal-content { margin: auto; display: block; max-width: 90%; max-height: 85vh; margin-top: 50px; }
+        .modal-content { margin: auto; display: block; max-width: 95%; max-height: 90vh; margin-top: 30px; }
         .close { position: absolute; top: 15px; right: 35px; color: #fff; font-size: 40px; cursor: pointer; }
     </style>
 </head>
@@ -64,7 +95,7 @@
             <button onclick="filterRegion('bisman')">Bisman</button>
             <button onclick="filterRegion('swc')">SWC</button>
             <button onclick="filterRegion('sw')">SW</button>
-            <button onclick="filterRegion('mt-dickinson')">MT-Dickinson</button>
+            <button onclick="filterRegion('mt-dickinson')">MT-Dick</button>
         </div>
     </div>
 </header>
@@ -174,8 +205,8 @@
 <div id="imageModal" class="modal"><span class="close" onclick="closeModal()">&times;</span><img class="modal-content" id="modalImg"></div>
 
 <script>
-    const ROTATION_TIME = 20000; // 20 Seconds
-    const REFRESH_RATE = 30000;  // 30 Seconds
+    const ROTATION_TIME = 20000; 
+    const REFRESH_RATE = 30000;  
     const regions = ["nw", "nwc", "minot", "nec", "ne", "grand-forks", "fargo", "se", "sec", "sc", "bisman", "swc", "sw", "mt-dickinson"];
     
     let rotationTimer = null;

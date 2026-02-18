@@ -11,10 +11,13 @@
     document.getElementById("refreshBtn").addEventListener("click", refreshAll);
     document.getElementById("autoRotateBtn").addEventListener("click", toggleAutoRotate);
 
-    // --- NEW: RESUME AUTO-ROTATE ON LOAD ---
+    // --- NEW: CHECK URL FOR "autorotate=true" ON LOAD ---
     window.onload = () => {
-        const savedState = localStorage.getItem("autoRotateEnabled");
-        if (savedState === "true") {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('autorotate') === 'true') {
+            // Restore current index if it's in the URL, otherwise start at 0
+            const savedIdx = urlParams.get('idx');
+            if (savedIdx) currentIdx = parseInt(savedIdx);
             startRotation();
         }
     };
@@ -43,30 +46,31 @@
         
         if (percent >= 100) {
             currentIdx = (currentIdx + 1) % regions.length;
+            
+            // UPDATE THE URL so the rotation extension sees the new index
+            const newUrl = window.location.protocol + "//" + window.location.pathname + 
+                           `?autorotate=true&idx=${currentIdx}`;
+            window.history.replaceState({path:newUrl}, '', newUrl);
+
             filterRegion(regions[currentIdx]);
             startTime = Date.now(); 
         }
     }
 
-    // --- MODIFIED: TOGGLE SAVES TO STORAGE ---
     function toggleAutoRotate() {
         if (rotationTimer) {
-            // STOP
-            clearInterval(progressTimer);
-            rotationTimer = null;
-            document.getElementById("autoRotateBtn").dataset.status = "off";
-            document.getElementById("autoRotateBtn").innerText = "Auto-Rotate: OFF";
-            document.getElementById("timerContainer").style.display = "none";
-            localStorage.setItem("autoRotateEnabled", "false"); // Remember "OFF"
-            filterRegion("all");
+            // STOP: Clean the URL
+            const cleanUrl = window.location.protocol + "//" + window.location.pathname;
+            window.history.replaceState({path:cleanUrl}, '', cleanUrl);
+            location.reload(); // Force reload to kill all timers cleanly
         } else {
-            // START
+            // START: Add flag to URL
+            const newUrl = window.location.protocol + "//" + window.location.pathname + `?autorotate=true&idx=0`;
+            window.history.replaceState({path:newUrl}, '', newUrl);
             startRotation();
-            localStorage.setItem("autoRotateEnabled", "true"); // Remember "ON"
         }
     }
 
-    // NEW helper function to handle the startup logic
     function startRotation() {
         const btn = document.getElementById("autoRotateBtn");
         const barContainer = document.getElementById("timerContainer");
@@ -89,6 +93,5 @@
     function closeModal() { document.getElementById("imageModal").style.display = "none"; }
     window.onclick = (e) => { if (e.target.className === 'modal') closeModal(); };
 
-    // Global background refresh
     setInterval(refreshAll, REFRESH_RATE);
 </script>

@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <title>ND DOT Camera Dashboard</title>
   <link rel="stylesheet" href="styles.css">
-  <button id="refreshBtn">Refresh All</button>
+    <button id="refreshBtn">Refresh All</button>
+ </button>
 </head>
   <script src="script.js" defer></script>
 <body>
@@ -35,87 +36,58 @@
 
 <!-- ===== NW ===== -->
 <div class="camera-card" data-region="nw">
- <img
-      src="https://www.dot.nd.gov/travel-info/cameras/US2RP15Willistoneast.jpg"
-      class="refreshable"
-      alt="Williston - East"
-    >
+  <div class="label">Williston - East</div>
+  <div class="image-wrapper">
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP15Willistoneast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nw">
-     <img 
-       src="https://www.dot.nd.gov/travel-info/cameras/US2RP15Willistonwest.jpg" 
-      class="refreshable"
-      alt="Williston - West"
-      onclick="openModal(this)"
-      >
-    </div>
+  <div class="label">Williston - West</div>
+  <div class="image-wrapper">
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP15Willistonwest.jpg" class="refreshable">
+  </div>
 </div>
 
 <div class="camera-card" data-region="nw">
   <div class="label">Ray - East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP51Rayeast.jpg" 
-      class="refreshable"
-      alt ="Ray - East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP51Rayeast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nw">
   <div class="label">Ray - West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP51Raywest.jpg" 
-      class="refreshable"
-      alt ="Ray - West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP51Raywest.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nw">
   <div class="label">Watford City - North</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US85RP137WatfordCityNorth.jpg" 
-      class="refreshable"
-      alt ="Watford City - North"
-      onclick="openmodal(this)"
-      >
-   </div>
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US85RP137WatfordCityNorth.jpg" class="refreshable">
+  </div>
 </div>
 
 <div class="camera-card" data-region="nw">
   <div class="label">Watford City - South</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US85RP137WatfordCitySouth.jpg" 
-      class="refreshable"
-      alt ="Watford City - South"
-      onclick="openmodal(this)"
-      >
-  </div> 
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US85RP137WatfordCitySouth.jpg" class="refreshable">
+  </div>
 </div>
 
 <div class="camera-card" data-region="nw">
   <div class="label">New Town - East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/ND23RP46Newtowneast.jpg" 
-      class="refreshable"
-      alt ="New Town - East"
-      onclick="openmodal(this)"
-    >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/ND23RP46Newtowneast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nw">
   <div class="label">New Town - West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/ND23RP46Newtownwest.jpg" 
-      class="refreshable"
-      alt ="New Town - West"
-      onclick="openmodal(this)"
-    >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/ND23RP46Newtownwest.jpg" class="refreshable">
   </div>
 </div>
 
@@ -123,88 +95,56 @@
 <div class="camera-card" data-region="nwc">
   <div class="label">Kenmare - North</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US52RP36KenmareNorth.jpg" 
-      class="refreshable"
-      alt ="Kenmare - North"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US52RP36KenmareNorth.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nwc">
   <div class="label">Kenmare - South</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US52RP36KenmareSouth.jpg" 
-      class="refreshable"
-      alt ="Kenmare - South"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US52RP36KenmareSouth.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nwc">
   <div class="label">Killdeer - East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/killdeerweast.jpg" 
-      class="refreshable"
-      alt ="Killdeer - East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/killdeerweast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nwc">
   <div class="label">Killdeer - West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/killdeerwwest.jpg" 
-      class="refreshable"
-      alt ="Killdeer - West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/killdeerwwest.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nwc">
   <div class="label">Manning - North</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/ND22RP82Manningnorth.jpg" 
-      class="refreshable"
-      alt ="Manning - North"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/ND22RP82Manningnorth.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nwc">
   <div class="label">Manning - South</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/ND22RP82Manningsouth.jpg" 
-      class="refreshable"
-      alt ="Manning - South"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/ND22RP82Manningsouth.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nwc">
   <div class="label">Golden Valley - East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/ND200RP231GoldenValleyEast.jpg" 
-      class="refreshable"
-      alt ="Golden Valley - East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/ND200RP231GoldenValleyEast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nwc">
   <div class="label">Golden Valley - West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/ND200RP231GoldenValleyWest.jpg" 
-      class="refreshable"
-      alt ="Golden Valley - West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/ND200RP231GoldenValleyWest.jpg" class="refreshable">
   </div>
 </div>
 
@@ -212,65 +152,42 @@
 <div class="camera-card" data-region="minot">
   <div class="label">East Minot – US 2 East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP151MinotEast.jpg" 
-      class="refreshable"
-      alt ="East Minot - US 2 East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP151MinotEast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="minot">
   <div class="label">East Minot – US 2 West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP151MinotWest.jpg" 
-      class="refreshable"
-      alt ="East Minot - US 2 West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP151MinotWest.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="minot">
   <div class="label">West Minot US 2 East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP142MinotEast.jpg" 
-      class="refreshable"
-      alt ="West Minot US 2 East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP142MinotEast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="minot">
   <div class="label">East Minot US 2 West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP142MinotWest.jpg" 
-      class="refreshable"
-      alt ="Minot US 2 West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP142MinotWest.jpg" class="refreshable">
   </div>
 </div>
 
   <div class="camera-card" data-region="minot">
   <div class="label">Minot US 83 North</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US83RP196MinotNorth.jpg" 
-      class="refreshable"
-      alt ="Minot US 83 North"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US83RP196MinotNorth.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="minot">
   <div class="label">Minot US 83 South</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US83RP196MinotSouth.jpg" 
-      class="refreshable"
-      alt ="Minot US 83 South"
-      onclick="openmodal(this)">
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US83RP196MinotSouth.jpg" class="refreshable">
   </div>
 </div>
 
@@ -278,66 +195,42 @@
 <div class="camera-card" data-region="mt-dickinson">
   <div class="label">Beach — East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBEast.jpg" 
-      class="refreshable"
-      alt ="Beach - East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBEast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="mt-dickinson">
   <div class="label">Beach — West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBWest.jpg" 
-      class="refreshable"
-      alt ="Beach - West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP1BeachEBWest.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="mt-dickinson">
   <div class="label">Painted Canyon — East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP31PaintedCanyonEast.jpg" 
-      class="refreshable"
-      alt ="Painted Canyon - East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP31PaintedCanyonEast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="mt-dickinson">
   <div class="label">Painted Canyon — West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP31PaintedCanyonWest.jpg" 
-      class="refreshable"
-      alt ="Painted Canyon - West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP31PaintedCanyonWest.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="mt-dickinson">
   <div class="label">Dickinson — East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP63DickinsonEBEast.jpg" 
-      class="refreshable"
-      alt ="Dickinson - East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP63DickinsonEBEast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="mt-dickinson">
   <div class="label">Dickinson — West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP63DickinsonEBWest.jpg" 
-      class="refreshable"
-      alt ="Dickinson - West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/I94RP63DickinsonEBWest.jpg" class="refreshable">
   </div>
 </div>
 
@@ -345,66 +238,42 @@
 <div class="camera-card" data-region="sw">
   <div class="label">Gladstone — East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/gladstoneeast.jpg"  
-      class="refreshable"
-      alt ="Gladstone - East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/gladstoneeast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="sw">
   <div class="label">Gladstone — West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/gladstonewest.jpg"  
-      class="refreshable"
-      alt ="Gladstone - West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/gladstonewest.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="sw">
   <div class="label">New England — North</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/newenglandnorth.jpg"  
-      class="refreshable"
-      alt ="New England - North"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/newenglandnorth.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="sw">
   <div class="label">New England — South</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/newenglandsouth.jpg"  
-      class="refreshable"
-      alt ="New England - South"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/newenglandsouth.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="sw">
   <div class="label">Bowman — North</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US85RP12Bowmannorth.jpg"  
-      class="refreshable"
-      alt ="Bowman - North"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US85RP12Bowmannorth.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="sw">
   <div class="label">Bowman — South</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US85RP12Bowmansouth.jpg"  
-      class="refreshable"
-      alt ="Bowman - South"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US85RP12Bowmansouth.jpg" class="refreshable">
   </div>
 </div>
   
@@ -412,88 +281,56 @@
 <div class="camera-card" data-region="nec">
   <div class="label">Rugby - East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/rugbyeast.jpg"  
-      class="refreshable"
-      alt ="Rugby - East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/rugbyeast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nec">
   <div class="label">Rugby - West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/rugbywest.jpg"  
-      class="refreshable"
-      alt ="Rugby - West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/rugbywest.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nec">
   <div class="label">Devils Lake - East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP271DevilsLakeEast.jpg"  
-      class="refreshable"
-      alt ="Devils Lake - East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP271DevilsLakeEast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nec">
   <div class="label">Devils Lake - West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP271DevilsLakeWest.jpg"  
-      class="refreshable"
-      alt ="Devils Lake - West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US2RP271DevilsLakeWest.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nec">
   <div class="label">Fessenden - East</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US52RP180FessendenEast.jpg"  
-      class="refreshable"
-      alt ="Fessenden - East"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US52RP180FessendenEast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nec">
   <div class="label">Fessenden - West</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/US52RP180FessendenWest.jpg"  
-      class="refreshable"
-      alt ="Fessenden - West"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/US52RP180FessendenWest.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nec">
   <div class="label">Denhoff - North</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/denhoffnorth.jpg"  
-      class="refreshable"
-      alt ="Denhoff - North"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/denhoffnorth.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="nec">
   <div class="label">Denhoff - South</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/denhoffsouth.jpg"  
-      class="refreshable"
-      alt ="Denhoff - South"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/denhoffsouth.jpg" class="refreshable">
   </div>
 </div>
 
@@ -502,44 +339,28 @@
 <div class="camera-card" data-region="swc">
   <div class="label">New Salem- East</div>
   <div class="image-wrapper">
-    <img src=" https://www.dot.nd.gov/travel-info/cameras/I94RP126NewSalemEast.jpg"  
-      class="refreshable"
-      alt ="New Salem - East"
-      onclick="openmodal(this)"
-      >
+    <img src=" https://www.dot.nd.gov/travel-info/cameras/I94RP126NewSalemEast.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="swc">
   <div class="label">New Salem - West</div>
   <div class="image-wrapper">
-    <img src=" https://www.dot.nd.gov/travel-info/cameras/I94RP126NewSalemWest.jpg"  
-      class="refreshable"
-      alt ="New Salem - West"
-      onclick="openmodal(this)"
-      >
+    <img src=" https://www.dot.nd.gov/travel-info/cameras/I94RP126NewSalemWest.jpg">
   </div>
 </div>
 
 <div class="camera-card" data-region="swc">
   <div class="label">Fort Yates - North</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/ND1806@RP22.81FortYatesNorth.jpg"  
-      class="refreshable"
-      alt ="Fort Yates - North"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/ND1806@RP22.81FortYatesNorth.jpg" class="refreshable">
   </div>
 </div>
 
 <div class="camera-card" data-region="swc">
   <div class="label">Fort Yates - South</div>
   <div class="image-wrapper">
-    <img src="https://www.dot.nd.gov/travel-info/cameras/ND1806@RP22.81FortYatesSouth.jpg"  
-      class="refreshable"
-      alt ="Fort Yates - South"
-      onclick="openmodal(this)"
-      >
+    <img src="https://www.dot.nd.gov/travel-info/cameras/ND1806@RP22.81FortYatesSouth.jpg" class="refreshable">
   </div>
 </div>
 
@@ -870,10 +691,6 @@ setInterval(() => {
   });
 }, 3600000); // 1 hour
 </script>
+
 </body>
 </html>
-<div id="imageModal" class="modal" onclick="closeModal()">
-  <span class="close">&times;</span>
-  <img class="modal-content" id="modalImg">
-  <div id="modalCaption"></div>
-</div>

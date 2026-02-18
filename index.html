@@ -82,6 +82,7 @@
         </div>
         <div class="filters">
             <button onclick="filterRegion('all')">All</button>
+            <button onclick="filterRegion('map')">🗺️ LIVE MAP</button>
             <button onclick="filterRegion('nw')">NW</button>
             <button onclick="filterRegion('nwc')">NWC</button>
             <button onclick="filterRegion('minot')">Minot</button>
@@ -100,6 +101,10 @@
     </div>
 </header>
 
+<div id="mapContainer">
+    <iframe id="dotMap" src="https://travel.dot.nd.gov/?expand=weather&layers=closed-blocked,event-orange,incident-red,informational-grey,radar-animate,roads,travelalerts,warning-blue,warning-yellow"></iframe>
+</div>
+    
 <div class="grid" id="cameraGrid">
     <div class="camera-card" data-region="nw"><div class="label">Williston E</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP15Willistoneast.jpg" class="refreshable" onclick="openModal(this)"></div></div>
     <div class="camera-card" data-region="nw"><div class="label">Williston W</div><div class="image-wrapper"><img src="https://www.dot.nd.gov/travel-info/cameras/US2RP15Willistonwest.jpg" class="refreshable" onclick="openModal(this)"></div></div>

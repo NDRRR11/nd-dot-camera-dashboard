@@ -12,9 +12,10 @@ h1 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(autofit, minmax(300px, 1fr);
-  gap: 8px;
-  padding: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+  padding: 12px;
+  align-items: start; /* 👈 grid-level control */
 }
 
 .camera-card {

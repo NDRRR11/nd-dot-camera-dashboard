@@ -1,58 +1,47 @@
-const refreshInterval = 30000; 
-const rotationSpeed = 20000;    
-const regions = ["nw", "nwc", "minot", "nec", "ne", "grand-forks", "fargo", "se", "sec", "sc", "bisman", "swc", "sw", "mt-dickinson"];
+<script>
+    const refreshInterval = 30000; // Refreshes images every 30 seconds
+    const rotationSpeed = 20000;   // NOW SET TO 20 SECONDS per region
+    const regions = ["nw", "nwc", "minot", "nec", "ne", "grand-forks", "fargo", "se", "sec", "sc", "bisman", "swc", "sw", "mt-dickinson"];
+    let rotationTimer = null;
+    let currentIdx = 0;
 
-let rotationTimer = null;
-let currentIdx = 0;
-
-document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("refreshBtn").addEventListener("click", refreshAll);
     document.getElementById("autoRotateBtn").addEventListener("click", toggleAutoRotate);
-    
-    // Auto-refresh timer
-    setInterval(refreshAll, refreshInterval);
-});
 
-function refreshAll() {
-    const images = document.querySelectorAll(".refreshable");
-    
-    images.forEach(img => {
-        // 1. Force image reload
-        const baseUrl = img.src.split("?")[0];
-        img.src = `${baseUrl}?t=${new Date().getTime()}`;
-        
-        // 2. Visual feedback: flash the label blue
-        const label = img.closest('.camera-card').querySelector('.label');
-        label.classList.add('refreshing');
-        setTimeout(() => label.classList.remove('refreshing'), 500);
-    });
-    console.log("All cameras updated.");
-}
-
-function filterRegion(region) {
-    const cards = document.querySelectorAll(".camera-card");
-    cards.forEach(card => {
-        card.style.display = (region === "all" || card.dataset.region === region) ? "block" : "none";
-    });
-}
-
-function toggleAutoRotate() {
-    const btn = document.getElementById("autoRotateBtn");
-    if (rotationTimer) {
-        clearInterval(rotationTimer);
-        rotationTimer = null;
-        btn.dataset.status = "off";
-        btn.innerText = "Auto-Rotate: OFF";
-        filterRegion("all");
-    } else {
-        btn.dataset.status = "on";
-        btn.innerText = "Auto-Rotate: ON";
-        rotationTimer = setInterval(() => {
-            filterRegion(regions[currentIdx]);
-            currentIdx = (currentIdx + 1) % regions.length;
-        }, rotationSpeed);
+    function refreshAll() {
+        document.querySelectorAll(".refreshable").forEach(img => {
+            img.src = img.src.split("?")[0] + "?t=" + new Date().getTime();
+            const lbl = img.closest('.camera-card').querySelector('.label');
+            lbl.classList.add('refreshing');
+            setTimeout(() => lbl.classList.remove('refreshing'), 600);
+        });
     }
-}
+
+    function filterRegion(region) {
+        document.querySelectorAll(".camera-card").forEach(card => {
+            card.style.display = (region === "all" || card.dataset.region === region) ? "block" : "none";
+        });
+    }
+
+    function toggleAutoRotate() {
+        const btn = document.getElementById("autoRotateBtn");
+        if (rotationTimer) {
+            clearInterval(rotationTimer);
+            rotationTimer = null;
+            btn.dataset.status = "off";
+            btn.innerText = "Auto-Rotate: OFF";
+            filterRegion("all");
+        } else {
+            btn.dataset.status = "on";
+            btn.innerText = "Auto-Rotate: ON";
+            
+            // Starts the rotation immediately and then every 20 seconds
+            rotationTimer = setInterval(() => {
+                filterRegion(regions[currentIdx]);
+                currentIdx = (currentIdx + 1) % regions.length;
+            }, rotationSpeed);
+        }
+    }
 
 // Lightbox/Modal Logic
 function openModal(img) {

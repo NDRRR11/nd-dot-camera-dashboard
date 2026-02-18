@@ -12,9 +12,11 @@ h1 {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(6, 1fr); /* 👈 6 cameras per row */
   gap: 12px;
   padding: 12px;
+  align-items: start;          /* prevents vertical stretching */
+  grid-auto-rows: max-content; /* rows size to content */
 }
 
 .camera-card {

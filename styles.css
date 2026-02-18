@@ -17,7 +17,9 @@ h1 {
   padding: 12px;
   align-items: start;
   grid-auto-rows: max-content;
+  grid-auto-flow: dense; /* 👈 THIS is the magic */
 }
+
 
 .camera-card {
   background: #1e1e1e;

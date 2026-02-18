@@ -39,7 +39,12 @@
     <div id="timerContainer"><div id="timerBar"></div></div>
     <div class="header-content">
         <h1>ND DOT COMMAND CENTER</h1>
+        <div class="controls">
+            <button id="refreshBtn" onclick="refreshAll()" style="background: #007acc;">Manual Refresh</button>
+            <button id="autoRotateBtn" onclick="toggleAutoRotate()" data-status="on" style="background: #28a745;">Auto-Rotate: ON</button>
+        </div>
         <div class="filters">
+            <button onclick="manualFilter('all')">Show All</button>
             <button onclick="manualFilter('map')">🗺️ MAP</button>
             <button onclick="manualFilter('nw')">NW</button>
             <button onclick="manualFilter('nwc')">NWC</button>
@@ -54,7 +59,7 @@
             <button onclick="manualFilter('bisman')">Bisman</button>
             <button onclick="manualFilter('swc')">SWC</button>
             <button onclick="manualFilter('sw')">SW</button>
-            <button onclick="manualFilter('mt-dickinson')">MT-Dickinson</button>
+            <button onclick="manualFilter('mt-dickinson')">MT-Dick</button>
         </div>
     </div>
 </header>

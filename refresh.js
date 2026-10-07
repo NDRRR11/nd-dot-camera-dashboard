@@ -11,14 +11,19 @@
     document.getElementById("refreshBtn").addEventListener("click", refreshAll);
     document.getElementById("autoRotateBtn").addEventListener("click", toggleAutoRotate);
 
-    // --- NEW: CHECK URL FOR "autorotate=true" ON LOAD ---
+    // --- AUTO-START ON LOAD UNLESS DISABLED BY USER ---
     window.onload = () => {
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('autorotate') === 'true') {
-            // Restore current index if it's in the URL, otherwise start at 0
-            const savedIdx = urlParams.get('idx');
-            if (savedIdx) currentIdx = parseInt(savedIdx);
+        const savedIdx = urlParams.get('idx');
+        if (savedIdx) currentIdx = parseInt(savedIdx);
+
+        // Check if user manually turned auto-rotate off in a previous session
+        const isAutoRotateDisabled = localStorage.getItem("autoRotateDisabled") === "true";
+
+        if (!isAutoRotateDisabled) {
             startRotation();
+        } else {
+            updateButtonUI(false);
         }
     };
 
@@ -47,7 +52,7 @@
         if (percent >= 100) {
             currentIdx = (currentIdx + 1) % regions.length;
             
-            // UPDATE THE URL so the rotation extension sees the new index
+            // UPDATE THE URL to preserve current index across reloads if needed
             const newUrl = window.location.protocol + "//" + window.location.pathname + 
                            `?autorotate=true&idx=${currentIdx}`;
             window.history.replaceState({path:newUrl}, '', newUrl);
@@ -59,31 +64,51 @@
 
     function toggleAutoRotate() {
         if (rotationTimer) {
-            // STOP: Clean the URL
-            const cleanUrl = window.location.protocol + "//" + window.location.pathname;
-            window.history.replaceState({path:cleanUrl}, '', cleanUrl);
-            location.reload(); // Force reload to kill all timers cleanly
+            // STOP: Store preference so it stays off
+            localStorage.setItem("autoRotateDisabled", "true");
+            stopRotation();
         } else {
-            // START: Add flag to URL
-            const newUrl = window.location.protocol + "//" + window.location.pathname + `?autorotate=true&idx=0`;
-            window.history.replaceState({path:newUrl}, '', newUrl);
+            // START: Clear off preference so it auto-starts in future visits
+            localStorage.removeItem("autoRotateDisabled");
             startRotation();
         }
     }
 
     function startRotation() {
-        const btn = document.getElementById("autoRotateBtn");
-        const barContainer = document.getElementById("timerContainer");
-        
-        btn.dataset.status = "on";
-        btn.innerText = "Auto-Rotate: ON";
-        barContainer.style.display = "block";
+        updateButtonUI(true);
         startTime = Date.now();
         rotationTimer = true;
         filterRegion(regions[currentIdx]);
         
         if (progressTimer) clearInterval(progressTimer);
         progressTimer = setInterval(updateProgressBar, 100);
+    }
+
+    function stopRotation() {
+        if (progressTimer) clearInterval(progressTimer);
+        rotationTimer = null;
+        
+        // Clean URL parameters
+        const cleanUrl = window.location.protocol + "//" + window.location.pathname;
+        window.history.replaceState({path:cleanUrl}, '', cleanUrl);
+
+        updateButtonUI(false);
+    }
+
+    function updateButtonUI(isOn) {
+        const btn = document.getElementById("autoRotateBtn");
+        const barContainer = document.getElementById("timerContainer");
+        
+        if (isOn) {
+            btn.dataset.status = "on";
+            btn.innerText = "Auto-Rotate: ON";
+            if (barContainer) barContainer.style.display = "block";
+        } else {
+            btn.dataset.status = "off";
+            btn.innerText = "Auto-Rotate: OFF";
+            if (barContainer) barContainer.style.display = "none";
+            document.getElementById("timerBar").style.width = "0%";
+        }
     }
 
     function openModal(img) {

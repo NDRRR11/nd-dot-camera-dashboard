@@ -33,25 +33,22 @@
 
     window.onload = () => {
 
-        const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.location.search);
 
-        // Restore the current region if it exists in the URL
-        const savedIdx = urlParams.get('idx');
+    // Restore the current region if one exists in the URL
+    const savedIdx = urlParams.get('idx');
 
-        if (savedIdx !== null) {
-            const parsedIdx = parseInt(savedIdx);
+    if (savedIdx !== null) {
+        const parsedIdx = parseInt(savedIdx);
 
-            if (!isNaN(parsedIdx) && parsedIdx >= 0 && parsedIdx < regions.length) {
-                currentIdx = parsedIdx;
-            }
+        if (!isNaN(parsedIdx) && parsedIdx >= 0 && parsedIdx < regions.length) {
+            currentIdx = parsedIdx;
         }
+    }
 
-        // Only remain OFF if the URL specifically says autorotate=false
-        if (urlParams.get('autorotate') !== 'false') {
-            startRotation();
-        }
-    };
-
+    // AUTO-ROTATE ON BY DEFAULT
+    startRotation();
+};
 
     // =========================================================
     // REFRESH ALL CAMERAS

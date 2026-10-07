@@ -167,7 +167,18 @@
     let isRotating = false;
     let rotationInterval = null;
     let currentIdx = 0;
+    let timer = 0;
     const regions = ['map', 'nw', 'nwc', 'minot', 'nec', 'ne', 'gf', 'fargo', 'se', 'sec', 'sc', 'bisman', 'swc', 'sw', 'mt-dick'];
+
+    // --- AUTO-START ROTATION ON PAGE LOAD ---
+    window.addEventListener('DOMContentLoaded', () => {
+        const isTurnedOff = localStorage.getItem("autoRotateDisabled") === "true";
+        if (!isTurnedOff) {
+            startRotation();
+        } else {
+            stopRotation();
+        }
+    });
 
     // ZOOM LOGIC
     function zoom(el) {
@@ -179,9 +190,16 @@
     }
 
     function manualFilter(region) {
-        stopRotation();
+        if (region === 'all') {
+            filterRegion('all');
+            return;
+        }
         currentIdx = regions.indexOf(region);
         filterRegion(region);
+        
+        // Reset timer progress on region selection without killing rotation
+        timer = 0;
+        document.getElementById("timerBar").style.width = "0%";
     }
 
     function filterRegion(region) {
@@ -201,17 +219,27 @@
     }
 
     function toggleAutoRotate() {
-        if (isRotating) stopRotation();
-        else startRotation();
+        if (isRotating) {
+            localStorage.setItem("autoRotateDisabled", "true");
+            stopRotation();
+        } else {
+            localStorage.removeItem("autoRotateDisabled");
+            startRotation();
+        }
     }
 
     function startRotation() {
+        if (isRotating) return;
         isRotating = true;
         document.getElementById("autoRotateBtn").innerText = "AUTO-ROTATE: ON";
         document.getElementById("autoRotateBtn").style.background = "#28a745";
         document.getElementById("timerContainer").style.display = "block";
         
-        let timer = 0;
+        timer = 0;
+        filterRegion(regions[currentIdx]);
+
+        if (rotationInterval) clearInterval(rotationInterval);
+        
         rotationInterval = setInterval(() => {
             timer += 100;
             document.getElementById("timerBar").style.width = (timer / 15000 * 100) + "%";
@@ -225,7 +253,7 @@
 
     function stopRotation() {
         isRotating = false;
-        clearInterval(rotationInterval);
+        if (rotationInterval) clearInterval(rotationInterval);
         document.getElementById("autoRotateBtn").innerText = "AUTO-ROTATE: OFF";
         document.getElementById("autoRotateBtn").style.background = "#333";
         document.getElementById("timerContainer").style.display = "none";
@@ -242,5 +270,4 @@
     setInterval(refreshAll, 60000);
 </script>
 </body>
-    Source: https://travel.dot.nd.gov
 </html>

@@ -14,7 +14,7 @@
     // --- NEW: CHECK URL FOR "autorotate=true" ON LOAD ---
     window.onload = () => {
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('autorotate') === 'true') {
+        if (urlParams.get('autorotate') === 'false') {
             // Restore current index if it's in the URL, otherwise start at 0
             const savedIdx = urlParams.get('idx');
             if (savedIdx) currentIdx = parseInt(savedIdx);
